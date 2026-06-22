@@ -1,8 +1,10 @@
 /*
  * Entry point — buildless ES module.
  * grain-1 범위: 반응형 캔버스 스케일 베이스만 책임진다.
- * 게임 루프 / 플레이어 / 충돌 / 타이틀 / HUD 는 후속 grain에서 추가한다.
+ * 게임 루프 / 플레이어 / 충돌 / HUD 는 후속 grain에서 추가한다.
  */
+
+import { initTitleScreen } from "./title.js";
 
 // 논리 무대 해상도 (16:9). 구현 설정값 — 디자인 토큰 아님.
 const STAGE = { width: 1280, height: 720 };
@@ -73,6 +75,8 @@ function drawStage() {
 function boot() {
   window.addEventListener("resize", resize);
   resize();
+  // 캔버스 위에 메인 타이틀 오버레이를 초기화한다(엔트런스 + 시작 이벤트 발행).
+  initTitleScreen();
   // 폰트 로딩 완료 후 한 번 더 그려 폰트 메트릭 반영(오버레이 텍스트).
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(resize);

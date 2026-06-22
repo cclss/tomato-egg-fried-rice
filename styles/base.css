@@ -65,13 +65,3 @@ button {
   justify-content: center;
   pointer-events: none;
 }
-
-/* 폰트/토큰 로딩 확인용 초기 표시. 후속 grain의 타이틀 화면이 대체한다. */
-.stage-loading {
-  font-family: var(--font-display);
-  font-size: var(--text-size-heading);
-  letter-spacing: var(--text-tracking-wide);
-  color: var(--color-text-secondary);
-  padding: var(--space-md) var(--space-lg);
-  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
-}

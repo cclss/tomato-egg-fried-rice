@@ -15,6 +15,7 @@
 
     <link rel="stylesheet" href="styles/tokens.css" />
     <link rel="stylesheet" href="styles/base.css" />
+    <link rel="stylesheet" href="styles/title.css" />
   </head>
   <body>
     <!-- 게임 무대 컨테이너 -->
@@ -24,7 +25,19 @@
 
       <!-- 화면 위 UI(타이틀/HUD/게임오버)가 마운트되는 오버레이 루트 -->
       <div id="overlay-root">
-        <p class="stage-loading">불러오는 중…</p>
+        <!-- 메인 타이틀 화면: 캔버스 위에 겹쳐지는 진입 오버레이 -->
+        <section class="title-screen" data-title-screen aria-labelledby="title-logo">
+          <!-- 배경에 부유/파랄랙스로 떠다니는 재료 장식(JS가 채운다) -->
+          <div class="title-ambient" data-title-ambient aria-hidden="true"></div>
+
+          <div class="title-content">
+            <h1 class="title-logo" id="title-logo">토마토 계란 볶음밥</h1>
+            <p class="title-tagline">재료를 모아 달려라!</p>
+            <div class="title-actions">
+              <button type="button" class="button" data-start-button>게임 시작</button>
+            </div>
+          </div>
+        </section>
       </div>
     </div>
 

@@ -63,6 +63,9 @@
   --motion-duration-fast: 120ms;
   --motion-duration-base: 220ms;
   --motion-duration-slow: 400ms;
+  /* ambient(앰비언트) 부유/파랄랙스 루프 시간축 — UI 전환축(fast/base/slow)과 별개의 깊이 레이어용 */
+  --motion-duration-float-near: 7s;
+  --motion-duration-float-far: 11s;
   --motion-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
   --motion-ease-emphasized: cubic-bezier(0.2, 0, 0, 1);
   --motion-ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);

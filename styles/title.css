@@ -1,0 +1,199 @@
+/*
+ * TitleScreen + Button Components.
+ * 모든 색/타이포/간격/모서리/모션 값은 tokens.css의 시맨틱 토큰만 참조한다(하드코딩 금지).
+ * position / inset / z-index / overflow / display / outline-style 등은 구현 설정값이므로 직접 사용한다.
+ */
+
+/* ---- TitleScreen ---- */
+.title-screen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background-color: var(--color-overlay-scrim);
+  pointer-events: auto;
+}
+
+/* 배경 부유 재료 레이어 (장식, 클릭 비대상) */
+.title-ambient {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* 한 개의 부유 재료. 위치/위상(animation-delay)은 JS가 인라인으로 분배한다(구현 배치값). */
+.float-ingredient {
+  position: absolute;
+  border-radius: var(--radius-pill);
+  animation-name: float-drift;
+  animation-timing-function: var(--motion-ease-standard);
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  will-change: transform;
+}
+
+/* 파랄랙스 깊이: near = 더 크고 더 빠르고 진폭 큼 / far = 더 작고 느리고 진폭 작음 */
+.float-ingredient--near {
+  width: var(--space-2xl);
+  height: var(--space-2xl);
+  --float-amp: var(--space-lg);
+  animation-duration: var(--motion-duration-float-near);
+}
+.float-ingredient--far {
+  width: var(--space-xl);
+  height: var(--space-xl);
+  --float-amp: var(--space-sm);
+  animation-duration: var(--motion-duration-float-far);
+}
+
+.float-ingredient--tomato {
+  background-color: var(--color-ingredient-tomato);
+}
+.float-ingredient--egg {
+  background-color: var(--color-ingredient-egg);
+}
+.float-ingredient--rice {
+  background-color: var(--color-ingredient-rice);
+}
+
+@keyframes float-drift {
+  from {
+    transform: translate3d(0, calc(var(--float-amp) * -1), 0);
+  }
+  to {
+    transform: translate3d(0, var(--float-amp), 0);
+  }
+}
+
+/* ---- TitleScreen 콘텐츠 ---- */
+.title-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-lg);
+  padding: var(--space-2xl);
+}
+
+.title-logo {
+  font-family: var(--font-display);
+  font-size: var(--text-size-title);
+  font-weight: var(--text-weight-bold);
+  line-height: var(--text-leading-tight);
+  letter-spacing: var(--text-tracking-wide);
+  color: var(--color-text-primary);
+  text-shadow: 0 var(--space-2xs) 0 var(--color-surface-ground-edge);
+}
+
+.title-tagline {
+  font-family: var(--font-display);
+  font-size: var(--text-size-heading);
+  font-weight: var(--text-weight-regular);
+  line-height: var(--text-leading-normal);
+  color: var(--color-text-secondary);
+}
+
+.title-actions {
+  display: flex;
+  gap: var(--space-md);
+}
+
+/* 엔트런스: 페이드 + 슬라이드업. 스태거 지연은 motion 토큰을 calc로 참조한다. */
+.title-logo,
+.title-tagline,
+.title-actions {
+  animation: title-enter var(--motion-duration-slow) var(--motion-ease-emphasized) both;
+}
+.title-tagline {
+  animation-delay: var(--motion-duration-fast);
+}
+.title-actions {
+  /* 버튼은 통통 튀는 bounce 이징으로 마지막에 등장 */
+  animation-timing-function: var(--motion-ease-bounce);
+  animation-delay: var(--motion-duration-base);
+}
+
+@keyframes title-enter {
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-lg));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---- Button (기본 액션 버튼) ---- */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding: var(--space-md) var(--space-2xl);
+  font-family: var(--font-display);
+  font-size: var(--text-size-button);
+  font-weight: var(--text-weight-bold);
+  letter-spacing: var(--text-tracking-wide);
+  color: var(--color-button-text);
+  background-color: var(--color-button-bg);
+  border: none;
+  border-radius: var(--radius-pill);
+  box-shadow: 0 var(--space-2xs) var(--space-sm) var(--color-overlay-scrim);
+  transition:
+    background-color var(--motion-duration-fast) var(--motion-ease-standard),
+    transform var(--motion-duration-fast) var(--motion-ease-bounce),
+    box-shadow var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+/* hover: 색 강조 + 살짝 떠오르며 그림자 확장 */
+.button:hover {
+  background-color: var(--color-button-bg-hover);
+  transform: translateY(calc(var(--space-2xs) * -1));
+  box-shadow: 0 var(--space-xs) var(--space-lg) var(--color-overlay-scrim);
+}
+
+/* active: 눌림 — 제자리로 내려가며 그림자 축소 */
+.button:active {
+  background-color: var(--color-button-bg-hover);
+  transform: translateY(0);
+  box-shadow: 0 var(--space-2xs) var(--space-xs) var(--color-overlay-scrim);
+}
+
+/* 키보드 포커스: focus-visible에만 또렷한 포커스 링 */
+.button:focus {
+  outline: none;
+}
+.button:focus-visible {
+  outline: var(--space-2xs) solid var(--color-focus-ring);
+  outline-offset: var(--space-2xs);
+}
+
+/* 접근성: 모션 최소화 환경에서는 엔트런스/부유/전환 비활성화 */
+@media (prefers-reduced-motion: reduce) {
+  .title-logo,
+  .title-tagline,
+  .title-actions,
+  .float-ingredient {
+    animation: none;
+  }
+  .title-logo,
+  .title-tagline,
+  .title-actions {
+    opacity: 1;
+    transform: none;
+  }
+  .button {
+    transition: none;
+  }
+  .button:hover,
+  .button:active {
+    transform: none;
+  }
+}

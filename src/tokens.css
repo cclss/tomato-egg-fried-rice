@@ -1,0 +1,62 @@
+/*
+ * Design Spec 토큰 → CSS 커스텀 프로퍼티 매핑 (단일 소스).
+ *
+ * 이 파일은 Design Spec(token-groups/*)에 등록된 값을 CSS 변수로 "노출"만 한다.
+ * 값/포맷을 변형하지 않는다 (Spec과 1:1). 모든 컴포넌트는 하드코딩 대신
+ * 이 변수만 참조한다. grain-3의 Inventory HUD도 동일 변수를 사용한다.
+ */
+:root {
+  /* color */
+  --color-app-bg-default: #1a1a2e;     /* 게임 앱 셸 배경 (게임 세계 backdrop) */
+  --color-panel-bg-default: #16213e;
+  --color-surface-raised: #1f2a4d;
+  --color-accent-default: #e94560;
+  --color-text-default: #f5f5f5;
+  --color-text-muted: #8b8ba7;
+  --color-text-on-accent: #16213e;
+  --color-border-edge-dark: #0d1521;
+  --color-border-edge-light: #3d5a8a;
+  --color-status-collected: #43d17a;
+  --color-status-uncollected: #4a4a63;
+  --color-status-complete: #ffd23f;
+
+  /* spacing */
+  --grid-unit: 4px;
+  --space-2xs: 2px;
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 24px;
+
+  /* sizing */
+  --icon-size-sm: 16px;
+  --icon-size-md: 24px;
+  --slot-size-md: 40px;
+  --badge-size-sm: 16px;
+  --progress-gauge-height: 8px;
+
+  /* typography */
+  --font-family-pixel: "Press Start 2P", "Galmuri11", "DungGeunMo", "DotGothic16", monospace;
+  --font-weight-normal: 400;
+  --text-size-sm: 8px;
+  --text-size-md: 12px;
+  --text-size-lg: 16px;
+  --line-height-tight: 1.0;
+  --line-height-base: 1.4;
+  --letter-spacing-pixel: 1px;
+
+  /* border */
+  --border-width-hairline: 1px;
+  --border-width-pixel: 2px;
+  --border-width-chunky: 4px;
+  --border-style-solid: solid;
+  --bevel-width: 2px;
+
+  /* motion */
+  --duration-instant: 80ms;
+  --duration-pop: 160ms;
+  --duration-flash: 240ms;
+  --easing-pixel: steps(4, end);
+  --easing-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
+}

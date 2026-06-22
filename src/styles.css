@@ -1,0 +1,67 @@
+/*
+ * Base 레이아웃 + grain-2 데모 스캐폴딩 스타일.
+ *
+ * 디자인 값은 전부 tokens.css 의 CSS 변수를 통해서만 사용한다 (하드코딩 금지).
+ * position/overflow/cursor 등은 구현 설정값이므로 직접 사용한다 (토큰 아님).
+ *
+ * 주의: Inventory HUD(#inventory-hud-root)의 시각 스타일은 여기서 다루지 않는다.
+ *       grain-3에서 구현한다.
+ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--color-app-bg-default);
+  color: var(--color-text-default);
+  font-family: var(--font-family-pixel);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-base);
+  letter-spacing: var(--letter-spacing-pixel);
+  image-rendering: pixelated;        /* impl: 레트로 픽셀 룩 */
+  -webkit-font-smoothing: none;      /* impl */
+}
+
+/* 게임 플레이 영역 — 데모 픽업이 스폰되는 무대 */
+#game-stage {
+  position: relative;   /* impl */
+  width: 100%;
+  height: 100vh;        /* impl: 플레이 영역이 viewport를 채움 */
+  overflow: hidden;     /* impl */
+}
+
+/* 데모 픽업 (드라이버 스캐폴딩 — 실제 게임 재료 스프라이트 아님) */
+.pickup {
+  position: absolute;                 /* impl */
+  font-size: var(--icon-size-md);
+  line-height: var(--line-height-tight);
+  padding: var(--space-2xs);
+  background: transparent;
+  border: 0;
+  cursor: pointer;                    /* impl */
+  image-rendering: pixelated;         /* impl */
+}
+
+/*
+ * grain-2 데모 관찰용 디버그 오버레이.
+ * 실제 Inventory HUD가 아니다. 스토어 동작을 눈으로 확인하기 위한 임시 표시.
+ */
+#demo-readout {
+  position: fixed;                    /* impl */
+  bottom: var(--space-sm);
+  left: var(--space-sm);
+  padding: var(--space-sm);
+  background: var(--color-panel-bg-default);
+  color: var(--color-text-default);
+  font-size: var(--text-size-sm);
+  line-height: var(--line-height-base);
+  border: var(--border-width-pixel) var(--border-style-solid) var(--color-border-edge-light);
+}

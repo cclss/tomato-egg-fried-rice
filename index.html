@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>도마도 달걀 볶음밥</title>
+  <!-- Design Spec 토큰을 CSS 변수로 노출 (단일 소스). 모든 컴포넌트가 이 변수만 참조한다. -->
+  <link rel="stylesheet" href="src/tokens.css" />
+  <link rel="stylesheet" href="src/styles.css" />
+</head>
+<body>
+  <!--
+    게임 플레이 영역 (횡스크롤 스테이지).
+    grain-2: 수집 드라이버가 데모 픽업을 스폰하는 영역.
+    이후 그레인에서 캐릭터/지형/카메라가 이 영역에 들어온다.
+  -->
+  <main id="game-stage" aria-label="게임 플레이 영역"></main>
+
+  <!--
+    Inventory HUD 마운트 지점 (빈 컨테이너).
+    시각 컴포넌트의 실제 렌더링/스타일은 grain-3에서 구현한다.
+  -->
+  <div id="inventory-hud-root"></div>
+
+  <!--
+    grain-2 데모 관찰용 디버그 오버레이.
+    실제 Inventory HUD 컴포넌트가 아니다 (스토어 동작을 눈으로 확인하기 위한 임시 스캐폴딩).
+  -->
+  <aside id="demo-readout" aria-hidden="true" hidden></aside>
+
+  <!-- 로드 순서: 데이터 → 스토어 → 드라이버 → 부트스트랩 -->
+  <script src="src/ingredients.js"></script>
+  <script src="src/inventoryStore.js"></script>
+  <script src="src/collectionDriver.js"></script>
+  <script src="src/main.js"></script>
+</body>
+</html>

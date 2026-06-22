@@ -15,6 +15,17 @@
     // 콘솔에서 직접 점검할 수 있도록 노출 (예: GAME.store.collect('egg')).
     GAME.store = store;
 
+    // Inventory HUD (grain-3) — 스토어를 읽기/구독하여 상단 중앙 HUD를 렌더한다.
+    // 상태 변경은 스토어를 통해서만 일어나고, HUD는 구독으로 실시간 갱신만 한다.
+    const hudRoot = document.getElementById('inventory-hud-root');
+    if (hudRoot && typeof GAME.createInventoryHUD === 'function') {
+      GAME.inventoryHUD = GAME.createInventoryHUD({
+        store: store,
+        ingredients: ingredients,
+        mount: hudRoot,
+      });
+    }
+
     const readout = document.getElementById('demo-readout');
     if (readout) {
       readout.hidden = false;

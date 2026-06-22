@@ -7,6 +7,7 @@
   <!-- Design Spec 토큰을 CSS 변수로 노출 (단일 소스). 모든 컴포넌트가 이 변수만 참조한다. -->
   <link rel="stylesheet" href="src/tokens.css" />
   <link rel="stylesheet" href="src/styles.css" />
+  <link rel="stylesheet" href="src/inventory.css" />
 </head>
 <body>
   <!--
@@ -28,10 +29,11 @@
   -->
   <aside id="demo-readout" aria-hidden="true" hidden></aside>
 
-  <!-- 로드 순서: 데이터 → 스토어 → 드라이버 → 부트스트랩 -->
+  <!-- 로드 순서: 데이터 → 스토어 → 드라이버 → HUD 컴포넌트 → 부트스트랩 -->
   <script src="src/ingredients.js"></script>
   <script src="src/inventoryStore.js"></script>
   <script src="src/collectionDriver.js"></script>
+  <script src="src/inventoryUI.js"></script>
   <script src="src/main.js"></script>
 </body>
 </html>

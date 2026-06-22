@@ -1,0 +1,178 @@
+/*
+ * Inventory HUD — 시각 스타일 (grain-3).
+ *
+ * Component 정의: design-spec/components/inventory-hud/base.md
+ *
+ * 모든 디자인 값(색/간격/치수/서체/테두리/모션/불투명도/변형)은 tokens.css 의
+ * CSS 변수(= Design Spec Token)만 참조한다. 하드코딩 금지.
+ * position / display / z-index / overflow / breakpoint / reflow 등은 구현 설정값이므로
+ * 직접 사용한다 (토큰 아님 — policy/coding.md 구현 설정값 구분).
+ */
+
+/* ── Panel Container ──────────────────────────────────────────────────────
+ * 화면 상단 중앙 고정 픽셀 프레임 패널. viewport 기준 고정(카메라/스크롤 무관).
+ */
+.inv-hud {
+  position: fixed;                 /* impl: viewport 고정 */
+  top: var(--space-sm);
+  left: 50%;
+  transform: translateX(-50%);     /* impl: 가로 중앙 정렬 */
+  z-index: 10;                     /* impl */
+
+  display: flex;                   /* impl */
+  flex-direction: column;          /* impl */
+  align-items: center;             /* impl */
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  max-width: calc(100% - var(--space-sm) * 2);  /* impl: 좁은 뷰포트 넘침 방지 */
+
+  background: var(--color-panel-bg-default);
+  color: var(--color-text-default);
+  font-family: var(--font-family-pixel);
+  font-weight: var(--font-weight-normal);
+  letter-spacing: var(--letter-spacing-pixel);
+  line-height: var(--line-height-tight);
+
+  /* 픽셀 베벨: 상단/좌측 밝은 모서리 + 하단/우측 어두운 모서리 */
+  border-top: var(--bevel-width) var(--border-style-solid) var(--color-border-edge-light);
+  border-left: var(--bevel-width) var(--border-style-solid) var(--color-border-edge-light);
+  border-right: var(--bevel-width) var(--border-style-solid) var(--color-border-edge-dark);
+  border-bottom: var(--bevel-width) var(--border-style-solid) var(--color-border-edge-dark);
+
+  transition: border-color var(--duration-flash) var(--easing-pixel),
+              background-color var(--duration-flash) var(--easing-pixel);
+}
+
+/* complete: 6종 전부 수집 → 패널 강조 */
+.inv-hud.is-complete {
+  border-top-color: var(--color-status-complete);
+  border-left-color: var(--color-status-complete);
+  border-right-color: var(--color-status-complete);
+  border-bottom-color: var(--color-status-complete);
+}
+
+/* ── Progress Indicator ── 전체 수집 진행도 (n/6) ───────────────────────── */
+.inv-hud__progress {
+  margin: 0;                       /* impl: <p> 기본 마진 제거 */
+  font-size: var(--text-size-md);
+  line-height: var(--line-height-tight);
+  color: var(--color-text-default);
+  transition: color var(--duration-flash) var(--easing-pixel);
+}
+
+.inv-hud.is-complete .inv-hud__progress {
+  color: var(--color-status-complete);
+}
+
+/* ── Material Slot 행 ── 6개 슬롯을 가로 한 줄로 ─────────────────────────── */
+.inv-hud__slots {
+  display: flex;                   /* impl */
+  flex-direction: row;             /* impl */
+  gap: var(--space-sm);
+}
+
+/* ── Material Slot ── 재료 1종의 수집 상태 칸 ───────────────────────────── */
+.inv-slot {
+  position: relative;              /* impl: Count Badge 앵커 */
+  width: var(--slot-size-md);
+  height: var(--slot-size-md);
+  display: flex;                   /* impl */
+  align-items: center;             /* impl */
+  justify-content: center;         /* impl */
+
+  background: var(--color-status-uncollected);
+  border: var(--border-width-pixel) var(--border-style-solid) var(--color-border-edge-dark);
+
+  transition: background-color var(--duration-pop) var(--easing-pixel);
+}
+
+/* collected: 수집된 슬롯 강조 */
+.inv-slot.is-collected {
+  background: var(--color-status-collected);
+}
+
+/* ── Material Icon ── 픽셀화 렌더링된 재료 아이콘 ───────────────────────── */
+.inv-slot__icon {
+  font-size: var(--icon-size-md);
+  line-height: var(--line-height-tight);
+  image-rendering: pixelated;      /* impl: 레트로 픽셀 룩 */
+
+  /* 미수집: text-muted 톤의 실루엣/디밍 (채도 제거 + 불투명도 낮춤) */
+  filter: grayscale(1);            /* impl: 실루엣화 기법 */
+  opacity: var(--opacity-muted);
+  transition: opacity var(--duration-pop) var(--easing-pixel),
+              filter var(--duration-pop) var(--easing-pixel);
+}
+
+/* collected: 풀컬러 복귀 */
+.inv-slot.is-collected .inv-slot__icon {
+  filter: none;
+  opacity: var(--opacity-full);
+}
+
+/* ── Count Badge ── 누적 개수 (같은 재료 2개 이상일 때만 노출) ──────────── */
+.inv-slot__badge {
+  position: absolute;              /* impl */
+  right: 0;                        /* impl */
+  bottom: 0;                       /* impl */
+  min-width: var(--badge-size-sm);
+  height: var(--badge-size-sm);
+  padding: 0 var(--space-2xs);
+  display: flex;                   /* impl */
+  align-items: center;             /* impl */
+  justify-content: center;         /* impl */
+
+  background: var(--color-accent-default);
+  color: var(--color-text-on-accent);
+  font-size: var(--text-size-sm);
+  line-height: var(--line-height-tight);
+  border: var(--border-width-hairline) var(--border-style-solid) var(--color-border-edge-dark);
+}
+
+/* ── 마이크로 인터랙션 ── uncollected → collected 전이 순간 1회 재생 ──────── */
+/* slot-pop + highlight-flash 를 동시에 재생 (Spec) */
+.inv-slot.is-collecting {
+  animation: inv-slot-pop var(--duration-pop) var(--easing-pop),
+             inv-slot-flash var(--duration-flash) var(--easing-pixel);
+}
+
+@keyframes inv-slot-pop {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(var(--scale-pop)); }
+  100% { transform: scale(1); }
+}
+
+@keyframes inv-slot-flash {
+  0%, 100% {
+    border-color: var(--color-border-edge-dark);
+    background-color: var(--color-status-collected);
+  }
+  50% {
+    border-color: var(--color-accent-default);
+    background-color: var(--color-accent-default);
+  }
+}
+
+/* ── 반응형 ── 좁은 뷰포트에서 간격/패딩을 한 단계 줄여 한 줄 유지 ───────── */
+@media (max-width: 360px) {     /* breakpoint: impl */
+  .inv-hud {
+    padding: var(--space-sm);
+    gap: var(--space-xs);
+  }
+  .inv-hud__slots {
+    gap: var(--space-xs);
+  }
+}
+
+/* ── 모션 비활성 경로 ── prefers-reduced-motion 대응 ────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .inv-hud,
+  .inv-hud__progress,
+  .inv-slot,
+  .inv-slot__icon {
+    transition: none;
+  }
+  .inv-slot.is-collecting {
+    animation: none;
+  }
+}

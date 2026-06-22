@@ -1,0 +1,104 @@
+/* ==========================================================================
+   Design Tokens — 토마토 계란 볶음밥 요리 게임
+   --------------------------------------------------------------------------
+   따뜻하고 경쾌한 요리 테마의 비주얼 언어.
+   - 컬러: 토마토 레드(강조) / 계란 옐로우(하이라이트) / 볶음밥 웜뉴트럴(배경·표면)
+   - 의미 기반(semantic) 토큰 명명. 컴포넌트는 이 토큰만 참조한다.
+   - 모든 텍스트/배경 조합은 WCAG AA(본문 4.5:1, 큰 텍스트 3:1)를 만족한다.
+   ========================================================================== */
+
+/* 한글 가독성 + 경쾌한 디스플레이 톤을 위한 웹폰트.
+   Jua = 둥글고 친근한 디스플레이(타이틀), Noto Sans KR = 본문/HUD 가독성. */
+@import url("https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;500;700&display=swap");
+
+:root {
+  /* ----------------------------------------------------------------------
+     COLOR — 색상
+     ---------------------------------------------------------------------- */
+  /* 배경 / 표면 — 볶음밥 웜뉴트럴 계열 */
+  --color-bg: #fff6e9;            /* 화면 기본 배경: 따뜻한 크림 */
+  --color-surface: #ffffff;       /* 패널/카드 표면 */
+  --color-surface-alt: #fbe9c7;   /* 보조 표면: 라이트 웜 베이지 */
+  --color-border: #ecd9b8;        /* 표면 구분 테두리 */
+
+  /* 텍스트 — 따뜻한 다크 브라운 */
+  --color-text: #3a2a1e;          /* 본문/기본 텍스트 (on bg 12.8:1) */
+  --color-text-muted: #7a6a5a;    /* 보조/약한 텍스트 (on bg 4.86:1) */
+  --color-text-on-accent: #ffffff;/* 강조색 위 텍스트 (on accent 4.77:1) */
+  --color-text-on-highlight: #3a2a1e; /* 하이라이트 위 텍스트 (7.67:1) */
+
+  /* 강조 — 토마토 레드 (주요 액션: 버튼 등) */
+  --color-accent: #d6361f;        /* 토마토 레드 (white 텍스트 4.77:1) */
+  --color-accent-strong: #b82a15; /* hover/active, on-light 텍스트 5.8:1 */
+  --color-accent-soft: #fbe2dc;   /* 강조의 연한 배경 톤 */
+
+  /* 하이라이트 — 계란 옐로우 (점수/포인트/보조 강조) */
+  --color-highlight: #f6b73c;     /* 계란 옐로우 (dark 텍스트 7.67:1) */
+  --color-highlight-strong: #e09e1f;
+  --color-highlight-soft: #fdeecb;
+
+  /* 상태 — 생명력/성공 등 */
+  --color-life: #d6361f;          /* 생명력(하트) = 토마토 레드 */
+  --color-life-empty: #e7d3bc;    /* 소진된 생명력 */
+  --color-success: #3f9d57;       /* 성공 (white 텍스트 AA) */
+
+  /* ----------------------------------------------------------------------
+     TYPOGRAPHY — 서체
+     ---------------------------------------------------------------------- */
+  --font-display: "Jua", "Gmarket Sans", "Pretendard", system-ui, sans-serif;
+  --font-body: "Noto Sans KR", "Pretendard", system-ui, -apple-system,
+    "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+
+  /* 크기 스케일 (root 16px 기준) */
+  --text-size-xs: 0.875rem;  /* 14px — HUD 라벨 */
+  --text-size-sm: 1rem;      /* 16px — 보조 텍스트 */
+  --text-size-md: 1.25rem;   /* 20px — 본문 */
+  --text-size-lg: 1.75rem;   /* 28px — HUD 수치/소제목 */
+  --text-size-xl: 2.5rem;    /* 40px — 섹션 제목 */
+  --text-size-display: 3.5rem; /* 56px — 메인 타이틀 */
+
+  /* 굵기 */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+
+  /* 행간 */
+  --line-height-tight: 1.15;  /* 디스플레이/타이틀 */
+  --line-height-normal: 1.5;  /* 본문 */
+
+  /* ----------------------------------------------------------------------
+     SPACING — 간격 (8px 기반 스케일, 미세 단위 4px)
+     ---------------------------------------------------------------------- */
+  --space-2xs: 0.25rem; /* 4px */
+  --space-xs: 0.5rem;   /* 8px */
+  --space-sm: 0.75rem;  /* 12px */
+  --space-md: 1rem;     /* 16px */
+  --space-lg: 1.5rem;   /* 24px */
+  --space-xl: 2.5rem;   /* 40px */
+  --space-2xl: 4rem;    /* 64px */
+
+  /* ----------------------------------------------------------------------
+     RADIUS — 모서리 둥글기 (경쾌·부드러운 톤)
+     ---------------------------------------------------------------------- */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 999px;
+  --radius-round: 50%;
+
+  /* ----------------------------------------------------------------------
+     SHADOW — 그림자 (따뜻한 갈색 톤 그림자)
+     ---------------------------------------------------------------------- */
+  --shadow-sm: 0 2px 6px rgba(58, 42, 30, 0.12);
+  --shadow-md: 0 6px 16px rgba(58, 42, 30, 0.16);
+  --shadow-lg: 0 12px 32px rgba(58, 42, 30, 0.20);
+
+  /* ----------------------------------------------------------------------
+     MOTION — 전환/모션 (톡톡 튀는 경쾌함)
+     ---------------------------------------------------------------------- */
+  --transition-fast: 120ms;
+  --transition-base: 200ms;
+  --transition-slow: 320ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+}

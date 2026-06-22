@@ -8,6 +8,9 @@
   --color-bg-base: #2a1a10;
   --color-bg-canvas-top: #ffe2b0;
   --color-bg-canvas-bottom: #ff9d4d;
+  /* 다층 파랄랙스 배경 실루엣: sky → far → near → ground 깊이 램프 */
+  --color-bg-parallax-far: #ffbf73;
+  --color-bg-parallax-near: #d98841;
   --color-surface-ground: #8d5524;
   --color-surface-ground-edge: #5e370f;
   --color-surface-panel: #3a2417;

@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="styles/base.css" />
     <link rel="stylesheet" href="styles/title.css" />
     <link rel="stylesheet" href="styles/hud.css" />
+    <link rel="stylesheet" href="styles/gameover.css" />
   </head>
   <body>
     <!-- 게임 무대 컨테이너 -->
@@ -27,7 +28,7 @@
       <!-- 화면 위 UI(타이틀/HUD/게임오버)가 마운트되는 오버레이 루트 -->
       <div id="overlay-root">
         <!-- 메인 타이틀 화면: 캔버스 위에 겹쳐지는 진입 오버레이 -->
-        <section class="title-screen" data-title-screen aria-labelledby="title-logo">
+        <section class="title-screen" data-title-screen data-status="visible" aria-labelledby="title-logo">
           <!-- 배경에 부유/파랄랙스로 떠다니는 재료 장식(JS가 채운다) -->
           <div class="title-ambient" data-title-ambient aria-hidden="true"></div>
 
@@ -66,6 +67,50 @@
             <div class="hud__materials" data-hud-materials role="group" aria-label="수집 재료 현황"></div>
           </div>
         </div>
+
+        <!-- 게임오버 화면: 최종 점수·재료 현황 + 다시 하기/타이틀로 액션 -->
+        <section
+          class="gameover"
+          data-gameover
+          data-status="hidden"
+          aria-hidden="true"
+          aria-labelledby="gameover-title"
+        >
+          <div class="gameover__panel">
+            <h2 class="gameover__title" id="gameover-title">게임 오버</h2>
+
+            <div class="gameover__score">
+              <span class="gameover__label">점수</span>
+              <span class="gameover__score-value" data-gameover-score>0</span>
+            </div>
+
+            <div class="gameover__stat">
+              <span class="gameover__label">거리</span>
+              <span class="gameover__stat-value" data-gameover-distance>0m</span>
+            </div>
+
+            <!-- 재료 현황 타일(토마토/계란/밥)은 gameover.js가 채운다 -->
+            <div
+              class="gameover__materials"
+              data-gameover-materials
+              role="group"
+              aria-label="재료 현황"
+            ></div>
+
+            <div class="gameover__actions">
+              <button type="button" class="button" data-gameover-restart>다시 하기</button>
+              <button type="button" class="button" data-gameover-title>타이틀로</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- 일시정지 오버레이: 창 포커스를 잃으면 표시, 복귀 시 자동으로 이어서 진행 -->
+        <section class="pause" data-pause data-status="hidden" aria-hidden="true">
+          <div class="pause__panel">
+            <p class="pause__title">일시정지</p>
+            <p class="pause__hint">돌아오면 이어서 달려요</p>
+          </div>
+        </section>
       </div>
     </div>
 

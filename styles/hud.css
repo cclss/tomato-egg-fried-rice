@@ -15,8 +15,13 @@
   transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
 }
 
-/* idle(타이틀) 상태에서는 숨긴다. running/over 에서 나타난다. */
+/* idle(타이틀) 상태에서는 숨긴다. running 에서 나타난다. */
 .hud[data-status="idle"] {
+  opacity: 0;
+}
+
+/* over(게임오버) 상태에서는 게임오버 화면이 최종 점수·재료를 대신 표시하므로 HUD를 숨긴다. */
+.hud[data-status="over"] {
   opacity: 0;
 }
 

@@ -6,13 +6,14 @@
  *   게임 상태는 engine.getState()와 document CustomEvent(game:start/collect/over)로 노출되어
  *   grain-4(HUD) / grain-5(상태머신)가 구독한다. 아래 `game` export도 동일 목적의 구독 경로다.
  *
- * 경계: 타이틀↔플레이↔게임오버 화면 전환(상태머신 배선)과 HUD 오버레이는 grain-5/grain-4가 맡는다.
- *   현재는 엔진을 즉시 start()해 루프·물리·수집·충돌·가속을 검증 가능하게 둔다. grain-5에서
- *   이 무조건 start()를 타이틀 `start` 이벤트 기반 전환으로 교체하고 화면 가시성을 관리한다.
+ * grain-5: 무조건 start()를 제거하고 중앙 상태머신(state-machine.js)에 화면 전환을 위임한다.
+ *   타이틀 `start` 이벤트로 플레이가 시작되고, `game:over`로 게임오버 화면이 뜨며, 다시 하기/타이틀로
+ *   액션으로 루프가 재시작·복귀한다. 입력(점프)은 playing 상태에서만 동작하도록 게이팅한다.
  */
 
 import { initTitleScreen } from "./title.js";
 import { initHud } from "./hud.js";
+import { initStateMachine } from "./state-machine.js";
 import { createGame } from "./engine.js";
 
 // 논리 무대 해상도 (16:9). 구현 설정값 — 디자인 토큰 아님.
@@ -72,11 +73,13 @@ function syncOverlay(displayW, displayH) {
 function wireInput() {
   window.addEventListener("keydown", (e) => {
     if (e.code === "Space" || e.code === "ArrowUp" || e.code === "KeyW") {
+      // 플레이 중에만 점프 입력을 가로챈다. 타이틀/게임오버에서는 기본 동작(버튼 키보드 활성화 등)을 보존한다.
+      if (game.getState().status !== "running") return;
       e.preventDefault(); // Space 페이지 스크롤 방지
       game.jump();
     }
   });
-  // 캔버스 영역 포인터 입력(타이틀 오버레이가 가려지면 grain-5에서 캔버스로 도달).
+  // 캔버스 영역 포인터 입력(플레이 중 타이틀/게임오버 오버레이가 숨겨져 캔버스로 도달).
   canvas.addEventListener("pointerdown", () => game.jump());
 }
 
@@ -88,8 +91,10 @@ function boot() {
   initTitleScreen();
   // 플레이 중 점수·재료 현황 HUD를 초기화한다(game 상태 구독 — 폴링 + game:* 이벤트).
   initHud(game);
-  // 코어 루프 구동(검증 가능 상태). grain-5에서 타이틀 전환 기반 start로 교체한다.
-  game.start();
+  // 중앙 상태머신: 타이틀↔플레이↔게임오버 전환·게임오버 화면·일시정지를 배선한다.
+  initStateMachine(game);
+  // 타이틀 뒤로 보이는 정적 무대를 한 번 그린다(루프는 start 이벤트에서 구동).
+  game.render();
   // 폰트 로딩 완료 후 한 번 더 그려 폰트 메트릭 반영(오버레이 텍스트).
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(resize);

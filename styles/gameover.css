@@ -1,0 +1,223 @@
+/*
+ * GameOver + Pause Overlay Components.
+ * 모든 색/타이포/간격/모서리/모션 값은 tokens.css의 시맨틱 토큰만 참조한다(하드코딩 금지).
+ * position / inset / z-index / pointer-events / overflow / display 등은 구현 설정값이므로 직접 사용한다.
+ *
+ * 재료 타일 아이콘(원형 + 광택)은 HUD와 동일한 토큰(ingredient-*, player-body 광택)을 사용해
+ * 세 화면이 시각적으로 일관되게 한다. CSS 클래스는 grain 경계를 지키려 각 컴포넌트가 따로 선언하되,
+ * 참조하는 토큰은 동일하다.
+ */
+
+/* ---- 화면 전환 공통: 캔버스 전면을 덮는 결과/안내 오버레이 ---- */
+.gameover,
+.pause {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background-color: var(--color-overlay-scrim);
+}
+
+/* 게임오버는 액션 버튼을 받으므로 입력을 받는다. */
+.gameover {
+  pointer-events: auto;
+  opacity: 1;
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+/* 일시정지는 정보 표시용(포커스 복귀 시 자동 해제)이라 입력을 가로채지 않는다. */
+.pause {
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+/* 숨김 상태: 페이드 아웃 + 입력 비대상 */
+.gameover[data-status="hidden"],
+.pause[data-status="hidden"] {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ---- 게임오버 결과 패널 ---- */
+.gameover__panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-lg);
+  padding: var(--space-2xl);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface-panel);
+  box-shadow: 0 var(--space-sm) var(--space-2xl) var(--color-overlay-scrim);
+  /* 등장 모션: 통통 튀며 떠오른다(테마의 bounce 인상). */
+  transition:
+    opacity var(--motion-duration-base) var(--motion-ease-standard),
+    transform var(--motion-duration-slow) var(--motion-ease-bounce);
+}
+
+/* 숨김 → 살짝 아래·축소된 상태에서 시작해 등장 시 튀어오른다. */
+.gameover[data-status="hidden"] .gameover__panel {
+  opacity: 0;
+  transform: translateY(var(--space-lg)) scale(0.96);
+}
+
+.gameover__title {
+  font-family: var(--font-display);
+  font-size: var(--text-size-title);
+  font-weight: var(--text-weight-bold);
+  line-height: var(--text-leading-tight);
+  letter-spacing: var(--text-tracking-wide);
+  color: var(--color-text-primary);
+  text-shadow: 0 var(--space-2xs) 0 var(--color-surface-ground-edge);
+}
+
+/* 공통 라벨(점수/거리) — HUD 라벨 톤과 일치 */
+.gameover__label {
+  display: block;
+  font-family: var(--font-body);
+  font-size: var(--text-size-caption);
+  font-weight: var(--text-weight-bold);
+  letter-spacing: var(--text-tracking-wide);
+  line-height: var(--text-leading-tight);
+  color: var(--color-text-secondary);
+}
+
+/* 최종 점수: 가장 큰 강조 */
+.gameover__score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2xs);
+}
+
+.gameover__score-value {
+  font-family: var(--font-display);
+  font-size: var(--text-size-title);
+  font-weight: var(--text-weight-bold);
+  line-height: var(--text-leading-tight);
+  color: var(--color-player-accent);
+}
+
+/* 거리 통계 */
+.gameover__stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2xs);
+}
+
+.gameover__stat-value {
+  font-family: var(--font-display);
+  font-size: var(--text-size-heading);
+  line-height: var(--text-leading-tight);
+  color: var(--color-text-primary);
+}
+
+/* ---- 재료 현황 타일 (HUD 재료 타일과 동일 토큰으로 일관) ---- */
+.gameover__materials {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.gameover-tile {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  padding: var(--space-2xs) var(--space-sm);
+  border-radius: var(--radius-md);
+  background-color: var(--color-overlay-scrim);
+}
+
+.gameover-tile__icon {
+  position: relative;
+  width: var(--space-lg);
+  height: var(--space-lg);
+  border-radius: var(--radius-pill);
+}
+
+.gameover-tile__icon::after {
+  content: "";
+  position: absolute;
+  top: 18%;
+  left: 18%;
+  width: 32%;
+  height: 32%;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-player-body);
+  opacity: 0.45;
+}
+
+.gameover-tile__icon--tomato {
+  background-color: var(--color-ingredient-tomato);
+}
+.gameover-tile__icon--egg {
+  background-color: var(--color-ingredient-egg);
+}
+.gameover-tile__icon--rice {
+  background-color: var(--color-ingredient-rice);
+}
+
+.gameover-tile__count {
+  font-family: var(--font-display);
+  font-size: var(--text-size-hud);
+  font-weight: var(--text-weight-bold);
+  line-height: var(--text-leading-tight);
+  color: var(--color-text-primary);
+}
+
+/* ---- 게임오버 액션 ---- */
+.gameover__actions {
+  display: flex;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ---- 일시정지 안내 패널 ---- */
+.pause__panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-xs);
+  padding: var(--space-xl) var(--space-2xl);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface-panel);
+  box-shadow: 0 var(--space-sm) var(--space-2xl) var(--color-overlay-scrim);
+}
+
+.pause__title {
+  font-family: var(--font-display);
+  font-size: var(--text-size-heading);
+  font-weight: var(--text-weight-bold);
+  letter-spacing: var(--text-tracking-wide);
+  line-height: var(--text-leading-tight);
+  color: var(--color-text-primary);
+}
+
+.pause__hint {
+  font-family: var(--font-body);
+  font-size: var(--text-size-caption);
+  line-height: var(--text-leading-normal);
+  color: var(--color-text-secondary);
+}
+
+/* ---- 접근성: 모션 최소화 환경에서는 전환·등장 모션 비활성화 ---- */
+@media (prefers-reduced-motion: reduce) {
+  .gameover,
+  .pause {
+    transition: none;
+  }
+  .gameover__panel {
+    transition: none;
+  }
+  .gameover[data-status="hidden"] .gameover__panel {
+    transform: none;
+  }
+}

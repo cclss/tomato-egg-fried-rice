@@ -15,6 +15,15 @@
   border-radius: var(--radius-lg);
   background-color: var(--color-overlay-scrim);
   pointer-events: auto;
+  opacity: 1;
+  /* 상태 전환(타이틀↔플레이)에서 화면이 페이드된다. */
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+/* 플레이/게임오버 중에는 숨겨 캔버스 입력(탭 점프)을 가리지 않는다. */
+.title-screen[data-status="hidden"] {
+  opacity: 0;
+  pointer-events: none;
 }
 
 /* 배경 부유 재료 레이어 (장식, 클릭 비대상) */
@@ -195,5 +204,8 @@
   .button:hover,
   .button:active {
     transform: none;
+  }
+  .title-screen {
+    transition: none;
   }
 }

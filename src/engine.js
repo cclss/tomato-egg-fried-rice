@@ -559,6 +559,26 @@ export function createGame({ canvas, ctx, stage, token, emitter }) {
     rafId = null;
   }
 
+  /**
+   * 루프만 멈춘다(상태·엔티티·점수는 보존). 창 포커스를 잃었을 때 일시정지용.
+   * 시뮬레이션 상태를 건드리지 않으므로 resume()으로 끊김 없이 이어갈 수 있다.
+   */
+  function pause() {
+    if (state.status !== "running" || !running) return;
+    running = false;
+    if (rafId != null) cancelAnimationFrame(rafId);
+    rafId = null;
+  }
+
+  /** pause()로 멈춘 루프를 재개한다. 누적 델타를 초기화해 정지 구간만큼의 점프를 막는다. */
+  function resume() {
+    if (state.status !== "running" || running) return;
+    running = true;
+    lastTime = 0;
+    acc = 0;
+    rafId = requestAnimationFrame(frame);
+  }
+
   /** 루프를 돌리지 않고 한 프레임만 그린다(시작 전/리사이즈 시 정적 프레임). */
   function renderOnce() {
     render();
@@ -583,5 +603,5 @@ export function createGame({ canvas, ctx, stage, token, emitter }) {
     };
   }
 
-  return { start, stop, reset, jump, render: renderOnce, refresh, getState };
+  return { start, stop, pause, resume, reset, jump, render: renderOnce, refresh, getState };
 }

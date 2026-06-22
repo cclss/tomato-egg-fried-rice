@@ -1,0 +1,182 @@
+/* ==========================================================================
+   HUD — 게임 플레이 화면 상단 상태 표시 (점수 / 생명력)
+   --------------------------------------------------------------------------
+   모든 디자인 값은 css/tokens.css의 시맨틱 토큰만 참조한다 (오염 금지).
+   구현 설정값(position, display, z-index, breakpoint, transform 변위 등)만
+   직접 사용한다.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   HUD 패널 — 플레이 영역 상단에 떠 있는 상태 바.
+   게임플레이 영역을 가리지 않도록 상단에 고정 배치하고, 그 아래로 콘텐츠가
+   흐르게 한다.
+   -------------------------------------------------------------------------- */
+.hud {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  /* 흰 표면 + 따뜻한 그림자로 크림 배경 위에 '떠 있는' 패널감을 만든다.
+     (테두리 두께(border-width)는 아직 토큰화되지 않았고 tokens.css는 이 grain의
+     수정 범위 밖이므로, 하드코딩 대신 surface+shadow로 패널을 구분한다.) */
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+/* --------------------------------------------------------------------------
+   Badge — 라벨 + 값 묶음 (점수 배지 / 생명력 배지)
+   -------------------------------------------------------------------------- */
+.hud__badge {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-2xs) var(--space-sm);
+  border-radius: var(--radius-pill);
+}
+
+.hud__badge--score {
+  background-color: var(--color-highlight-soft);
+}
+
+.hud__badge--life {
+  background-color: var(--color-accent-soft);
+}
+
+.hud__label {
+  font-family: var(--font-body);
+  font-size: var(--text-size-xs);
+  font-weight: var(--font-weight-medium);
+  /* 라벨은 14px 소형 텍스트 → 두 배지(highlight-soft/accent-soft) 모두에서
+     WCAG AA(4.5:1)를 확실히 넘기기 위해 muted가 아닌 기본 텍스트색을 쓴다.
+     (muted on accent-soft = 4.21:1로 미달, color-text = 11:1로 통과) */
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+/* --------------------------------------------------------------------------
+   Score 값 — 계란 옐로우 톤 배지 위의 큰 수치
+   -------------------------------------------------------------------------- */
+.hud__score-value {
+  display: inline-block;
+  min-width: 1.5em; /* 자릿수 증가 시 레이아웃 흔들림 방지 (구현 설정값) */
+  font-family: var(--font-display);
+  font-size: var(--text-size-lg);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-tight);
+  color: var(--color-text-on-highlight);
+  text-align: right;
+  transform-origin: center;
+}
+
+/* 점수 증가 강조 — 톡톡 튀는 스케일 팝 */
+.hud__score-value.is-bumped {
+  animation: score-pop var(--transition-slow) var(--ease-bounce);
+}
+
+/* --------------------------------------------------------------------------
+   Life — 하트(토마토 모티프) 아이콘 묶음
+   -------------------------------------------------------------------------- */
+.hud__hearts {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+}
+
+.hud__heart {
+  width: var(--text-size-lg);
+  height: var(--text-size-lg);
+  display: block;
+  fill: var(--color-life);
+  transition: fill var(--transition-base) var(--ease-standard),
+    transform var(--transition-base) var(--ease-bounce);
+}
+
+/* 소진된 하트 — 흐린 색(color-life-empty) + 살짝 작아지며 비워짐.
+   (opacity는 디자인 토큰 축이지만 토큰/그룹이 없고 tokens.css가 범위 밖이므로
+   하드코딩하지 않는다. 색 전환 + scale 만으로 소진을 표현한다.) */
+.hud__heart.is-empty {
+  fill: var(--color-life-empty);
+  transform: scale(0.82);
+}
+
+/* 생명력 감소 피드백 — 하트 묶음 흔들림 */
+.hud__hearts.is-hit {
+  animation: life-shake var(--transition-slow) var(--ease-standard);
+}
+
+/* --------------------------------------------------------------------------
+   애니메이션 키프레임 (transform 변위는 구현 micro-interaction 값)
+   -------------------------------------------------------------------------- */
+@keyframes score-pop {
+  0% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(1.35);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes life-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-4px);
+  }
+  40% {
+    transform: translateX(4px);
+  }
+  60% {
+    transform: translateX(-3px);
+  }
+  80% {
+    transform: translateX(2px);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   반응형 — 좁은 화면에서 라벨/수치/하트 한 단계 축소
+   -------------------------------------------------------------------------- */
+@media (max-width: 480px) {
+  .hud {
+    gap: var(--space-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .hud__score-value {
+    font-size: var(--text-size-md);
+  }
+
+  .hud__heart {
+    width: var(--text-size-md);
+    height: var(--text-size-md);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   모션 감소 선호 — 강조/피드백 애니메이션 비활성화 (상태 변화는 유지)
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .hud__score-value.is-bumped {
+    animation: none;
+  }
+
+  .hud__hearts.is-hit {
+    animation: none;
+  }
+
+  .hud__heart {
+    transition: fill var(--transition-fast) linear;
+  }
+
+  .hud__heart.is-empty {
+    transform: none;
+  }
+}

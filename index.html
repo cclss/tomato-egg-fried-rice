@@ -6,6 +6,7 @@
     <title>토마토 계란 볶음밥을 만들자!</title>
     <link rel="stylesheet" href="css/tokens.css" />
     <link rel="stylesheet" href="css/screens.css" />
+    <link rel="stylesheet" href="css/hud.css" />
   </head>
   <body>
     <main id="app" class="app">
@@ -32,11 +33,36 @@
         aria-hidden="true"
       >
         <div id="play-root" class="play" tabindex="-1">
-          <!-- 점수 / 생명력 HUD 자리 (grain-3) -->
+          <!-- 점수 / 생명력 HUD (grain-3) -->
+          <header class="hud" aria-label="게임 상태">
+            <div class="hud__badge hud__badge--score">
+              <span class="hud__label">점수</span>
+              <span
+                class="hud__score-value"
+                id="hud-score"
+                aria-live="polite"
+                aria-atomic="true"
+                >0</span
+              >
+            </div>
+            <div class="hud__badge hud__badge--life">
+              <span class="hud__label">생명력</span>
+              <div
+                class="hud__hearts"
+                id="hud-hearts"
+                role="img"
+                aria-label="생명력"
+              >
+                <!-- 하트 아이콘은 js/hud.js가 렌더링한다 -->
+              </div>
+            </div>
+          </header>
+          <!-- 게임플레이 영역 (후속 grain) -->
         </div>
       </section>
     </main>
 
     <script src="js/screens.js" defer></script>
+    <script src="js/hud.js" defer></script>
   </body>
 </html>

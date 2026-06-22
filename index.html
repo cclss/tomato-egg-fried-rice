@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="styles/tokens.css" />
     <link rel="stylesheet" href="styles/base.css" />
     <link rel="stylesheet" href="styles/title.css" />
+    <link rel="stylesheet" href="styles/hud.css" />
   </head>
   <body>
     <!-- 게임 무대 컨테이너 -->
@@ -38,6 +39,33 @@
             </div>
           </div>
         </section>
+
+        <!-- 플레이 중 점수·재료 현황 HUD: 캔버스 위 상단에 겹쳐지는 비침투적 오버레이 -->
+        <div class="hud" data-hud data-status="idle" aria-hidden="true">
+          <div class="hud__bar">
+            <div class="hud__primary">
+              <div class="hud__score">
+                <span class="hud__label">점수</span>
+                <span class="hud__score-value" data-hud-score>0</span>
+              </div>
+              <div class="hud__telemetry">
+                <div class="hud__stat">
+                  <span class="hud__label">거리</span>
+                  <span class="hud__stat-value" data-hud-distance>0m</span>
+                </div>
+                <div class="hud__stat">
+                  <span class="hud__label">속도</span>
+                  <span class="hud__stat-value" data-hud-speed>1.0x</span>
+                  <span class="hud__gauge" aria-hidden="true">
+                    <span class="hud__gauge-fill" data-hud-speed-gauge></span>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <!-- 재료 종류별 타일(토마토/계란/밥)은 hud.js가 채운다 -->
+            <div class="hud__materials" data-hud-materials role="group" aria-label="수집 재료 현황"></div>
+          </div>
+        </div>
       </div>
     </div>
 

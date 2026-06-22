@@ -12,6 +12,7 @@
  */
 
 import { initTitleScreen } from "./title.js";
+import { initHud } from "./hud.js";
 import { createGame } from "./engine.js";
 
 // 논리 무대 해상도 (16:9). 구현 설정값 — 디자인 토큰 아님.
@@ -85,6 +86,8 @@ function boot() {
   wireInput();
   // 캔버스 위에 메인 타이틀 오버레이를 초기화한다(엔트런스 + 시작 이벤트 발행).
   initTitleScreen();
+  // 플레이 중 점수·재료 현황 HUD를 초기화한다(game 상태 구독 — 폴링 + game:* 이벤트).
+  initHud(game);
   // 코어 루프 구동(검증 가능 상태). grain-5에서 타이틀 전환 기반 start로 교체한다.
   game.start();
   // 폰트 로딩 완료 후 한 번 더 그려 폰트 메트릭 반영(오버레이 텍스트).

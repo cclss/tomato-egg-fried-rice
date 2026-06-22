@@ -1,0 +1,224 @@
+/*
+ * HUD Component — 플레이 중 점수·재료 현황 오버레이.
+ * 모든 색/타이포/간격/모서리/모션 값은 tokens.css의 시맨틱 토큰만 참조한다(하드코딩 금지).
+ * position / inset / pointer-events / z-index / overflow / display / breakpoint 등은
+ * 구현 설정값이므로 직접 사용한다.
+ */
+
+/* ---- 오버레이 루트: 캔버스 위 상단 정렬, 입력 비가로채기(비침투적) ---- */
+.hud {
+  position: absolute;
+  inset: 0;
+  padding: var(--space-md);
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+/* idle(타이틀) 상태에서는 숨긴다. running/over 에서 나타난다. */
+.hud[data-status="idle"] {
+  opacity: 0;
+}
+
+.hud__bar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.hud__primary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+/* ---- 공통 칩 외형 ---- */
+.hud__score,
+.hud__stat,
+.hud-tile {
+  background-color: var(--color-overlay-scrim);
+  border-radius: var(--radius-md);
+}
+
+/* ---- 점수 ---- */
+.hud__score {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2xs);
+  padding: var(--space-xs) var(--space-md);
+}
+
+.hud__label {
+  font-family: var(--font-body);
+  font-size: var(--text-size-caption);
+  font-weight: var(--text-weight-bold);
+  letter-spacing: var(--text-tracking-wide);
+  line-height: var(--text-leading-tight);
+  color: var(--color-text-secondary);
+}
+
+.hud__score-value {
+  display: inline-block;
+  transform-origin: left center;
+  font-family: var(--font-display);
+  font-size: var(--text-size-heading);
+  font-weight: var(--text-weight-bold);
+  line-height: var(--text-leading-tight);
+  color: var(--color-text-primary);
+}
+
+/* ---- 텔레메트리: 거리·속도 ---- */
+.hud__telemetry {
+  display: flex;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.hud__stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+  padding: var(--space-2xs) var(--space-sm);
+}
+
+.hud__stat-value {
+  font-family: var(--font-display);
+  font-size: var(--text-size-hud);
+  line-height: var(--text-leading-tight);
+  color: var(--color-text-primary);
+}
+
+/* 속도 게이지 막대 */
+.hud__gauge {
+  display: block;
+  width: var(--space-2xl);
+  height: var(--space-2xs);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-surface-panel-raised);
+  overflow: hidden;
+}
+
+.hud__gauge-fill {
+  display: block;
+  width: 0%;
+  height: 100%;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-player-accent);
+  transition: width var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+/* ---- 재료 타일 ---- */
+.hud__materials {
+  display: flex;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.hud-tile {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  padding: var(--space-2xs) var(--space-sm);
+  transform-origin: center;
+}
+
+/* 재료 아이콘: 강조색 원형 + 광택 하이라이트(무대 재료 표현과 일관) */
+.hud-tile__icon {
+  position: relative;
+  width: var(--space-lg);
+  height: var(--space-lg);
+  border-radius: var(--radius-pill);
+}
+
+.hud-tile__icon::after {
+  content: "";
+  position: absolute;
+  top: 18%;
+  left: 18%;
+  width: 32%;
+  height: 32%;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-player-body);
+  opacity: 0.45;
+}
+
+.hud-tile__icon--tomato {
+  background-color: var(--color-ingredient-tomato);
+}
+.hud-tile__icon--egg {
+  background-color: var(--color-ingredient-egg);
+}
+.hud-tile__icon--rice {
+  background-color: var(--color-ingredient-rice);
+}
+
+.hud-tile__count {
+  font-family: var(--font-display);
+  font-size: var(--text-size-hud);
+  font-weight: var(--text-weight-bold);
+  line-height: var(--text-leading-tight);
+  color: var(--color-text-primary);
+}
+
+/* ---- 수집 팝 피드백(카운트업 강조) ---- */
+.hud__score-value.is-pop,
+.hud-tile.is-pop {
+  animation: hud-pop var(--motion-duration-base) var(--motion-ease-bounce);
+}
+
+@keyframes hud-pop {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.28);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* ---- 좁은 뷰포트 대응: 패딩·글꼴 축소, 타일 줄바꿈 유지 ---- */
+@media (max-width: 600px) {
+  .hud {
+    padding: var(--space-xs);
+  }
+  .hud__bar {
+    gap: var(--space-xs);
+  }
+  .hud__score-value {
+    font-size: var(--text-size-hud);
+  }
+  .hud__stat-value,
+  .hud-tile__count {
+    font-size: var(--text-size-caption);
+  }
+  .hud-tile__icon {
+    width: var(--space-md);
+    height: var(--space-md);
+  }
+  .hud__gauge {
+    width: var(--space-xl);
+  }
+  .hud__materials {
+    gap: var(--space-2xs);
+  }
+}
+
+/* ---- 접근성: 모션 최소화 환경에서는 전환·팝 비활성화 ---- */
+@media (prefers-reduced-motion: reduce) {
+  .hud {
+    transition: none;
+  }
+  .hud__gauge-fill {
+    transition: none;
+  }
+  .hud__score-value.is-pop,
+  .hud-tile.is-pop {
+    animation: none;
+  }
+}

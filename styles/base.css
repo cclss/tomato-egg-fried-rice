@@ -1,0 +1,77 @@
+/*
+ * Global reset + base layout for the game stage.
+ * All design values reference semantic tokens from tokens.css.
+ * z-index / position / overflow / display 등은 구현 설정값이므로 직접 사용한다.
+ */
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  background-color: var(--color-bg-base);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  font-size: var(--text-size-body);
+  line-height: var(--text-leading-normal);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* ---- Stage: fills the viewport, centers the responsive canvas ---- */
+#game-root {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-bg-base);
+}
+
+/*
+ * 반응형 캔버스 스케일 베이스.
+ * 내부 해상도(width/height 속성)는 JS가 16:9 논리 무대 + devicePixelRatio 기준으로 설정한다.
+ * 화면상 크기(CSS width/height)도 JS가 뷰포트에 비율을 유지한 채 맞춘다.
+ * 여기서는 표현 토큰(모서리/그림자/배경)만 책임진다.
+ */
+#game-canvas {
+  display: block;
+  border-radius: var(--radius-lg);
+  background-color: var(--color-bg-canvas-bottom);
+  box-shadow: 0 var(--space-sm) var(--space-2xl) var(--color-overlay-scrim);
+}
+
+/* ---- Overlay root: layered over the canvas for title / HUD / game-over ---- */
+#overlay-root {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+/* 폰트/토큰 로딩 확인용 초기 표시. 후속 grain의 타이틀 화면이 대체한다. */
+.stage-loading {
+  font-family: var(--font-display);
+  font-size: var(--text-size-heading);
+  letter-spacing: var(--text-tracking-wide);
+  color: var(--color-text-secondary);
+  padding: var(--space-md) var(--space-lg);
+  transition: opacity var(--motion-duration-base) var(--motion-ease-standard);
+}

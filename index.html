@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>토마토 계란 볶음밥 러너</title>
+
+    <!-- 폰트 로딩: 디스플레이(Jua) + 본문/HUD(Gothic A1) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;700&family=Jua&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="styles/tokens.css" />
+    <link rel="stylesheet" href="styles/base.css" />
+  </head>
+  <body>
+    <!-- 게임 무대 컨테이너 -->
+    <div id="game-root">
+      <!-- 횡스크롤 무대가 그려지는 캔버스 -->
+      <canvas id="game-canvas" role="img" aria-label="요리 재료 러너 게임 화면"></canvas>
+
+      <!-- 화면 위 UI(타이틀/HUD/게임오버)가 마운트되는 오버레이 루트 -->
+      <div id="overlay-root">
+        <p class="stage-loading">불러오는 중…</p>
+      </div>
+    </div>
+
+    <!-- 모듈 진입점 -->
+    <script type="module" src="src/main.js"></script>
+  </body>
+</html>

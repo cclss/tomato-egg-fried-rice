@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>토마토 계란 볶음밥을 만들자!</title>
+    <link rel="stylesheet" href="css/tokens.css" />
+    <link rel="stylesheet" href="css/screens.css" />
+  </head>
+  <body>
+    <main id="app" class="app">
+      <!-- 시작 화면 -->
+      <section
+        id="screen-start"
+        class="screen screen--start is-active"
+        aria-label="시작 화면"
+      >
+        <div class="start">
+          <h1 class="start__title">토마토 계란 볶음밥을<br />만들자!</h1>
+          <p class="start__subtitle">신선한 재료로 따끈한 볶음밥을 완성하세요</p>
+          <button id="btn-start" class="btn btn--primary" type="button">
+            게임 시작
+          </button>
+        </div>
+      </section>
+
+      <!-- 게임 플레이 화면 (HUD는 grain-3에서 채워진다) -->
+      <section
+        id="screen-play"
+        class="screen screen--play"
+        aria-label="게임 플레이 화면"
+        aria-hidden="true"
+      >
+        <div id="play-root" class="play" tabindex="-1">
+          <!-- 점수 / 생명력 HUD 자리 (grain-3) -->
+        </div>
+      </section>
+    </main>
+
+    <script src="js/screens.js" defer></script>
+  </body>
+</html>
